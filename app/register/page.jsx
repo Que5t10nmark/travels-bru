@@ -51,6 +51,7 @@ function RegisterPage() {
       <div className='bg-white p-6 rounded-md shadow-md w-full max-w-md'>
         <h3 className='text-black text-center text-2xl mb-4'>ลงทะเบียนเข้าใช้งาน</h3>
         <form onSubmit={handleSubmit}>
+          
           {error && (
             <div className='bg-red-600 w-fit text-sm text-white py-1 px-3 rounded-md mt-2'>
               {error}

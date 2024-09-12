@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 export async function GET(request) {
   const comments = await prisma.comment.findMany({
     include: {
-      user: true, // Include user information
+      user: true, 
       place: true,
     },
   });
@@ -23,7 +23,7 @@ export async function POST(request) {
         userId: parseInt(userId),
       },
       include: {
-        user: true, // Include user information
+        user: true, 
         place: true,
       },
     });

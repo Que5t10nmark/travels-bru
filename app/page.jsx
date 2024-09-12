@@ -1,8 +1,8 @@
 "use client";
+
 import { useState } from 'react';
-import Image from 'next/image';
-import Head from 'next/head';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 export default function Home() {
   const [query, setQuery] = useState("");
@@ -15,17 +15,23 @@ export default function Home() {
     if (query.trim()) {
       setLoading(true);
       setError(null);
+      
       try {
-        // Perform search request
         const res = await fetch(`/api/search?query=${encodeURIComponent(query)}`);
         const data = await res.json();
+  
+        if (data.places && data.places.length > 0) {
+          const place = data.places[0];
+          const route = place.category.toLowerCase(); // ใช้ category เพื่อกำหนดเส้นทางหน้าเพจ
 
-        if (data.category) {
-          // Redirect to category page
-          router.push(`/categories/${encodeURIComponent(data.category)}`);
-        } else if (data.places && data.places.length > 0) {
-          // Redirect to the first place found
-          router.push(`/places/${data.places[0].id}`);
+          // นำทางไปยังหน้าเพจที่เหมาะสมตามหมวดหมู่ของสถานที่
+          if (route === 'attraction') {
+            router.push(`/attractions/${place.id}`);
+          } else if (route === 'restaurant') {
+            router.push(`/restaurant/${place.id}`);
+          } else if (route === 'hotel') {
+            router.push(`/hotel/${place.id}`);
+          }
         } else {
           setError('ไม่พบผลลัพธ์สำหรับคำค้นหาของคุณ');
         }
@@ -37,45 +43,32 @@ export default function Home() {
       }
     }
   };
-
+  
   return (
     <main>
-      <>
-        <Head>
-          <title>หน้าแรก | ค้นหาที่เที่ยวน่าสนใจ</title>
-          <meta name="keywords" content="แนะนำที่เที่ยว, สถานที่, ร้านอาหาร, คาเฟ่, ที่พัก"/>
-        </Head>
-        <div className="flex flex-col items-center justify-center min-h-screen bg-[#7AA2E3] p-3">
-          <h1 className="text-4xl font-bold text-center text-blue-600 mb-6">
-            โมโม๊ะเด้อ!!! บุรีรัมย์
-          </h1>
-          <Image src="/images/bg.png" width={300} height={300} alt="logo" className="mb-4"/>
-          <p className="text-lg text-gray-700 text-center mb-8">
-            ยินดีต้อนรับสู่เว็บไซต์แนะนำที่ท่องเที่ยว
-          </p>
-          
-          <div className="w-full max-w-lg">
-            <form onSubmit={handleSearch} className="flex items-center bg-white rounded-full shadow-md overflow-hidden">
-              <input
-                type="text"
-                placeholder="ค้นหาสถานที่แหล่งท่องเที่ยว ร้านอาหาร คาเฟ่ ที่พัก"
-                className="flex-grow px-4 py-2 text-gray-700 focus:outline-none"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-              />
-              <button 
-                type="submit" 
-                className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-full hover:bg-blue-700 transition-colors"
-                disabled={loading}
-              >
-                {loading ? 'กำลังค้นหา...' : 'ค้นหา'}
-              </button>
-            </form>
-
-            {error && <p className="text-red-500 mt-4">{error}</p>}
-          </div>
-        </div>
-      </>
+      <div className="flex flex-col items-center justify-center min-h-screen bg-[#7AA2E3] p-3">
+        <h1 className="text-4xl font-bold text-center text-blue-600 mb-6">
+          โมโม๊ะเด้อ!!! บุรีรัมย์
+        </h1>
+        <Image src="/images/back.png" width={300} height={500} alt="logo" className="mb-2"/>
+        <form onSubmit={handleSearch} className="flex items-center bg-white rounded-full shadow-md overflow-hidden w-full max-w-lg">
+          <input
+            type="text"
+            placeholder="ค้นหาสถานที่แหล่งท่องเที่ยว ร้านอาหาร คาเฟ่ ที่พัก"
+            className="flex-grow px-4 py-2 text-gray-700 focus:outline-none"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+          <button 
+            type="submit" 
+            className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-full hover:bg-blue-700 transition-colors"
+            disabled={loading}
+          >
+            {loading ? 'กำลังค้นหา...' : 'ค้นหา'}
+          </button>
+        </form>
+        {error && <p className="text-red-500 mt-4">{error}</p>}
+      </div>
     </main>
   );
 }

@@ -12,17 +12,17 @@ export async function GET(request, { params }) {
 
   try {
     // ดึงข้อมูลสถานที่จากฐานข้อมูล
-    const place = await prisma.place.findUnique({
+    const hotel = await prisma.place.findUnique({
       where: { id: Number(id) },
       include: { comments: { include: { user: true } } }, // รวมความคิดเห็นและข้อมูลผู้ใช้
     });
 
-    if (!place) {
+    if (!hotel) {
       return new Response(JSON.stringify({ message: 'Place not found' }), { status: 404 });
     }
 
     // ส่งข้อมูลสถานที่กลับไปยัง client
-    return new Response(JSON.stringify({ place }), { status: 200 });
+    return new Response(JSON.stringify({ hotel }), { status: 200 });
   } catch (error) {
     console.error('Server error:', error);
     return new Response(JSON.stringify({ message: 'Server error' }), { status: 500 });

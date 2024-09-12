@@ -15,9 +15,9 @@ export default function HotelDetail({ params }) {
     // ดึงข้อมูลโรงแรม
     const fetchHotel = async () => {
       try {
-        const res = await fetch(`/api/places/${id}`);
+        const res = await fetch(`/api/hotel/${id}`);
         const data = await res.json();
-        setHotel(data.place);
+        setHotel(data.hotel);
       } catch (error) {
         console.error('เกิดข้อผิดพลาดในการดึงข้อมูลโรงแรม:', error);
       }
@@ -76,7 +76,7 @@ export default function HotelDetail({ params }) {
 
   return (
     <div className="container mx-auto p-4">
-      <Link href="/hotel" className="text-blue-500 underline mb-4 inline-block">
+      <Link href="/hotel" className="text-blue-500 underline mb-4 inline-block border border-blue-500 rounded-lg px-3 py-1 hover:bg-blue-500 hover:text-white">
         &larr; กลับ
       </Link>
       <h1 className="text-3xl font-bold mb-4">{hotel.name}</h1>
@@ -92,11 +92,26 @@ export default function HotelDetail({ params }) {
           />
         </div>
         <div className="w-full md:w-1/2 p-4">
+          <h1>รายละเอียด</h1>
           <p className="text-gray-700">{hotel.description}</p>
+          <h1>ที่อยู่</h1>
+          <p className="text-gray-700">{hotel.address}</p>
+          <h1>เวลาทำการ</h1>
+          <p className="text-gray-700">{hotel.opentime}</p>
+          <p className="text-gray-700">
+            <a 
+              href={hotel.googleMaps} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="text-blue-500 underline hover:text-blue-700"
+            >
+              ดูแผนที่
+            </a>
+          </p>
         </div>
       </div>
 
-      {/* กล่องแสดงความคิดเห็นอยู่ด้านบน */}
+      {/* กล่องแสดงความคิดเห็นอยู่ด้านล่าง */}
       <div className="mt-6">
         <CommentSection
           comments={hotel.comments || []}

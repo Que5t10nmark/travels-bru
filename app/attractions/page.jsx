@@ -27,7 +27,7 @@ export default async function AttractionsPage() {
                   className="transition-transform transform hover:scale-105"
                 />
               </div>
-              <div className="p-4">
+              <div className="p-2">
                 <h2 className="text-xl font-semibold mb-2">{attraction.name}</h2>
                 <p className="text-gray-600">{attraction.description}</p>
               </div>

@@ -1,11 +1,9 @@
 import React from 'react';
 
 // ฟังก์ชันสำหรับจัดรูปแบบเวลา
-const formatTime = (dateString) => {
+const formatDate = (dateString) => {
   const date = new Date(dateString);
-  const hours = date.getHours().toString().padStart(2, '0');
-  const minutes = date.getMinutes().toString().padStart(2, '0');
-  return `${hours}:${minutes}`;
+  return date.toLocaleDateString('th-TH', { day: 'numeric', month: 'long', year: 'numeric' });
 };
 
 const CommentSection = ({ comments, user, onSubmit }) => {
@@ -55,7 +53,7 @@ const CommentSection = ({ comments, user, onSubmit }) => {
         {comments.map(comment => (
           <div key={comment.id} className="comment p-4 border-b border-gray-200">
             <p className="font-semibold">ความคิดเห็นจาก {comment.user.name}</p>
-            <p className="text-gray-400 text-sm">เวลา {formatTime(comment.createdAt)}</p>
+            <p className="text-gray-400 text-sm">เมื่อ {formatDate(comment.createdAt)}</p>
             <p className="text-yellow-500">{'⭐'.repeat(comment.rating)}</p>
             <p className="text-gray-600">{comment.text}</p>
           </div>

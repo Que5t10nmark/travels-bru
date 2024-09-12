@@ -36,7 +36,7 @@ export default function NavBar() {
           <li><Link href="/attractions">แหล่งท่องเที่ยว</Link></li>
           <li><Link href="/restaurant">ร้านอาหาร</Link></li>
           <li><Link href="/hotel">ที่พัก</Link></li>
-          <li><Link href="/about">เกี่ยวกับ</Link></li>
+          <li><Link href="/about">ติดต่อเรา</Link></li>
           {user ? (
             <>
               <li>สวัสดี, {user.name}</li>

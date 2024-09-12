@@ -15,9 +15,9 @@ export default function AttractionDetail({ params }) {
     // ดึงข้อมูลสถานที่ท่องเที่ยว
     const fetchAttraction = async () => {
       try {
-        const res = await fetch(`/api/places/${id}`);
+        const res = await fetch(`/api/attraction/${id}`);
         const data = await res.json();
-        setAttraction(data.place);
+        setAttraction(data.attraction);
       } catch (error) {
         console.error('เกิดข้อผิดพลาดในการดึงข้อมูลสถานที่ท่องเที่ยว:', error);
       }
@@ -89,7 +89,22 @@ export default function AttractionDetail({ params }) {
           />
         </div>
         <div className="w-full md:w-1/2 p-4">
+          <h1>รายละอียด</h1>
           <p className="text-gray-700">{attraction.description}</p>
+          <h1>ที่อยู่</h1>
+          <p className="text-gray-700">{attraction.address}</p>
+          <h1>เวลาทำการ</h1>
+          <p className="text-gray-700">{attraction.opentime}</p>
+          <p className="text-gray-700">
+            <a 
+              href={attraction.googleMaps} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="text-blue-500 underline hover:text-blue-700"
+            >
+              ดูแผนที่
+            </a>
+          </p>
         </div>
       </div>
 

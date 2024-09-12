@@ -18,10 +18,13 @@ model User {
 
 model Place {
   id          Int      @id @default(autoincrement())
-  name        String
+  name        String   @unique
   category    String
   image       String
-  description String
+  description String  @db.VarChar(1000)
+  address    String  
+  opentime    String  
+  googleMaps  String  @db.VarChar(1000)
   comments    Comment[]
 }
 

@@ -1,32 +1,26 @@
 // app/api/search/route.js
-import { NextResponse } from 'next/server';
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
 
 export async function GET(request) {
+  const url = new URL(request.url);
+  const query = url.searchParams.get('query') || '';
+
   try {
-    const url = new URL(request.url);
-    const query = url.searchParams.get('query')?.trim();
+    // ดึงข้อมูลสถานที่ที่ตรงกับ query
+    const places = await prisma.place.findMany({
+      where: {
+        name: {
+          contains: query,
+        },
+      },
+    });
 
-    if (!query) {
-      return NextResponse.json({ error: 'Query is required' }, { status: 400 });
-    }
-
-    if (['ร้านอาหาร', 'แหล่งท่องเที่ยว', 'โรงแรม'].includes(query)) {
-      // Redirect to category page
-      return NextResponse.json({ category: query });
-    }
-
-    // Fetch places by name
-    const placeRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/places?name=${encodeURIComponent(query)}`);
-
-    if (!placeRes.ok) {
-      console.error('Failed to fetch places', placeRes.statusText);
-      throw new Error('Failed to fetch places');
-    }
-
-    const places = await placeRes.json();
-    return NextResponse.json({ places });
+    // ส่งข้อมูลสถานที่กลับไปยัง client
+    return new Response(JSON.stringify({ places }), { status: 200 });
   } catch (error) {
-    console.error('Error in search API:', error);
-    return NextResponse.json({ error: 'เกิดข้อผิดพลาดในการค้นหา' }, { status: 500 });
+    console.error('Server error:', error);
+    return new Response(JSON.stringify({ message: 'Server error' }), { status: 500 });
   }
 }

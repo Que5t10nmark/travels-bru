@@ -14,7 +14,7 @@ export async function POST(req) {
     });
 
     if (!user || !(await bcrypt.compare(password, user.password))) {
-      return new Response(JSON.stringify({ message: 'Invalid email or password' }), { status: 401 });
+      return new Response(JSON.stringify({ message: 'อีเมลหรือรหัสผ่านไม่ถูกต้อง' }), { status: 401 });
     }
 
     // สร้าง JWT
